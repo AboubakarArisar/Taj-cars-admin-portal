@@ -20,3 +20,13 @@ export const getCars = async () => {
 };
 
 export const createCar = async (carData) => {};
+
+export const Login = async (adminData) => {
+  try {
+    const response = await instance.post("/api/admin/signin", adminData);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cars:", error);
+    throw error;
+  }
+};
