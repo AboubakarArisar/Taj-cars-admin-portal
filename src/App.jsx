@@ -1,9 +1,10 @@
 import React from "react";
+import Login from "./Components/Login";
 
 const App = () => {
   return (
     <div>
-      <h1 class='text-3xl font-bold '>Admin portal Taj Cars!</h1>
+      <Login />
     </div>
   );
 };
