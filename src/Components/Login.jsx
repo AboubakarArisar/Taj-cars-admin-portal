@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Login as Signin } from "../services/admin.services";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -11,6 +11,13 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const admin = JSON.parse(localStorage.getItem("admin"));
+    const role = admin.role;
+    const token = localStorage.getItem("token");
+    toast.success("you are already loggedin");
+    if (role && token) navigate("/dashboard");
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +26,7 @@ const Login = () => {
       Signin(formData)
         .then((data) => {
           const { admin, token } = data;
-          localStorage.setItem("admin", admin);
+          localStorage.setItem("admin", JSON.stringify(admin));
           localStorage.setItem("token", token);
           toast.success("logged in Succesfully");
           navigate("/dashboard");
