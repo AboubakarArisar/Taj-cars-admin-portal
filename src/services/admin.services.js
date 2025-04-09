@@ -18,3 +18,5 @@ export const getCars = async () => {
     throw error;
   }
 };
+
+export const createCar = async (carData) => {};
