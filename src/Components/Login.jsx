@@ -13,9 +13,8 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     const admin = JSON.parse(localStorage.getItem("admin"));
-    const role = admin.role;
+    const role = admin?.role;
     const token = localStorage.getItem("token");
-    toast.success("you are already loggedin");
     if (role && token) navigate("/dashboard");
   }, []);
 
