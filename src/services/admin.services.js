@@ -30,3 +30,13 @@ export const Login = async (adminData) => {
     throw error;
   }
 };
+
+export const CountCars = async () => {
+  try {
+    const response = await instance.get("/api/car/count");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cars:", error);
+    throw error;
+  }
+};

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getCars } from "../services/admin.services";
-
+import { useNavigate } from "react-router-dom";
 const Loader = () => {
   return (
     <div className='flex justify-center items-center h-60'>
@@ -10,6 +10,7 @@ const Loader = () => {
 };
 const Cars = () => {
   const [cars, setCars] = useState([]);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     getCars()
@@ -22,9 +23,14 @@ const Cars = () => {
   }, []);
 
   return (
-    <div className='min-h-screen w-full bg-gradient-to-br from-black via-gray-900 to-black text-white px-6 py-10'>
+    <div className='min-h-screen relative w-full bg-gradient-to-br from-black via-gray-900 to-black text-white px-6 py-10'>
       <h1 className='text-4xl font-bold mb-10 text-center'>Available Cars</h1>
-
+      <button
+        onClick={() => navigate("/dashboard")}
+        className='absolute top-4 left-6 cursor-pointer px-3 py-2  bg-[#1DCD9F] text-black font-semibold rounded-xl hover:bg-[#17b58b] transition-all duration-300'
+      >
+        {"<-"}
+      </button>
       {loading ? (
         <>
           <Loader />
