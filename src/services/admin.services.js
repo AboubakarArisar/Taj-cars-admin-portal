@@ -19,7 +19,35 @@ export const getCars = async () => {
   }
 };
 
-export const createCar = async (carData) => {};
+export const addCar = async (carData) => {
+  const formData = new FormData();
+
+  formData.append("name", carData.name);
+  formData.append("model", carData.model);
+  formData.append("year", carData.year);
+  formData.append("price", carData.price);
+  formData.append("mileage", carData.mileage);
+  formData.append("engine", carData.engine);
+  formData.append("color", carData.color);
+  formData.append("stock_quantity", carData.stock_quantity);
+  formData.append("description", carData.description);
+
+  carData.images.forEach((image) => {
+    formData.append("images", image);
+  });
+
+  try {
+    const response = await instance.post("/api/car/", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding car:", error);
+    throw error;
+  }
+};
 
 export const Login = async (adminData) => {
   try {

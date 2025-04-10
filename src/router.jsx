@@ -4,6 +4,7 @@ import App from "./App";
 import Cars from "./pages/Cars";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/404";
+import AddCar from "./pages/AddCar";
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
             <Route path='/' element={<App />} />
             <Route path='*' element={<NotFound />} />
             <Route path='/cars' element={<Cars />} />
+            <Route path='/add/car' element={<AddCar />} />
             <Route path='/dashboard' element={<Dashboard />} />
           </Routes>
         </div>
