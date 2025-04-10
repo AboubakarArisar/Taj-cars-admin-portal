@@ -64,7 +64,7 @@ const AddCar = () => {
   };
 
   return (
-    <div className='w-full min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex justify-center items-center px-4 text-white'>
+    <div className='w-full min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex justify-center items-center p-4 text-white'>
       <Toaster />
       <div className='w-full max-w-4xl bg-[#1e1e1e] rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm p-8'>
         <h2 className='text-3xl font-semibold mb-6 text-center'>Add New Car</h2>
