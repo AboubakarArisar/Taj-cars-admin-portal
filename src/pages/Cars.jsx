@@ -184,11 +184,10 @@ const Cars = () => {
                 </div>
               ))}
               {editModalOpen && editCarData && (
-                <div className='fixed inset-0 overflow-auto bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50'>
-                  <div className='bg-[#1e1e1e] text-white rounded-2xl p-6 w-full max-w-md shadow-xl animate-scaleIn'>
+                <div className='fixed inset-0 overflow-auto bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50 px-4'>
+                  <div className='bg-[#1e1e1e] text-white rounded-2xl p-6 w-full max-w-xl shadow-xl animate-scaleIn max-h-[90vh] overflow-y-auto'>
                     <h2 className='text-2xl font-bold mb-4'>Edit Car</h2>
 
-                    {/* Image Preview + Upload */}
                     <div className='mb-4'>
                       <label className='block text-sm mb-1'>Image</label>
                       {editCarData.images?.[0] ? (
@@ -203,21 +202,26 @@ const Cars = () => {
                         </div>
                       )}
                       <input
-                        type='text'
-                        placeholder='Image URL'
-                        value={editCarData.images[0] || ""}
-                        onChange={(e) =>
-                          setEditCarData({
-                            ...editCarData,
-                            images: [e.target.value],
-                          })
-                        }
-                        className='w-full p-2 bg-[#2a2a2a] border border-gray-600 rounded-md text-white placeholder-gray-400'
+                        type='file'
+                        accept='image/*'
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              setEditCarData({
+                                ...editCarData,
+                                images: [reader.result],
+                              });
+                            };
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className='w-full mt-2 text-sm text-gray-400 file:bg-[#2a2a2a] file:border file:border-gray-600 file:rounded-md file:text-white file:px-4 file:py-2 file:cursor-pointer'
                       />
                     </div>
 
-                    {/* Input Fields */}
-                    <div className='grid gap-3'>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                       {[
                         { label: "Name", key: "name" },
                         { label: "Model", key: "model" },
@@ -251,28 +255,24 @@ const Cars = () => {
                           />
                         </div>
                       ))}
-
-                      {/* Description */}
-                      <div>
-                        <label className='block text-sm mb-1'>
-                          Description
-                        </label>
-                        <textarea
-                          value={editCarData.description}
-                          onChange={(e) =>
-                            setEditCarData({
-                              ...editCarData,
-                              description: e.target.value,
-                            })
-                          }
-                          rows={3}
-                          className='w-full p-2 bg-[#2a2a2a] border border-gray-600 rounded-md text-white placeholder-gray-400'
-                          placeholder='Description'
-                        />
-                      </div>
                     </div>
 
-                    {/* Action Buttons */}
+                    <div className='mt-4'>
+                      <label className='block text-sm mb-1'>Description</label>
+                      <textarea
+                        value={editCarData.description}
+                        onChange={(e) =>
+                          setEditCarData({
+                            ...editCarData,
+                            description: e.target.value,
+                          })
+                        }
+                        rows={3}
+                        className='w-full p-2 bg-[#2a2a2a] border border-gray-600 rounded-md text-white placeholder-gray-400'
+                        placeholder='Description'
+                      />
+                    </div>
+
                     <div className='flex justify-end gap-3 mt-6'>
                       <button
                         onClick={() => setEditModalOpen(false)}
@@ -282,7 +282,7 @@ const Cars = () => {
                       </button>
                       <button
                         onClick={() => {
-                          updateCar(editCarData._id, editCarData)
+                          updateCar(editCarData, editCarData._id)
                             .then(() => {
                               toast.success("Car updated successfully");
                               setEditModalOpen(false);
