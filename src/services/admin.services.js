@@ -78,3 +78,23 @@ export const deleteCar = async (carId) => {
     throw error;
   }
 };
+
+export const updateCar = async (carData, carId) => {
+  try {
+    const response = await instance.put(`/api/car/${carId}`, carData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating the car", error.message);
+    throw error;
+  }
+};
+
+export const getCarById = async (carId) => {
+  try {
+    const response = await instance.get(`/api/car/${carId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating the car", error.message);
+    throw error;
+  }
+};

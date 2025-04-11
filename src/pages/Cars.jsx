@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { getCars, deleteCar } from "../services/admin.services";
+import {
+  getCars,
+  deleteCar,
+  getCarById,
+  updateCar,
+} from "../services/admin.services";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
-import toast from "react-hot-toast";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 const Loader = () => {
   return (
     <div className='flex justify-center items-center h-60'>
@@ -17,6 +21,20 @@ const Cars = () => {
   const [loading, setLoading] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
   const [selectedCarId, setSelectedCarId] = useState(null);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [editCarData, setEditCarData] = useState(null);
+
+  const handleEditClick = (carId) => {
+    getCarById(carId)
+      .then((car) => {
+        setEditCarData(car);
+        setEditModalOpen(true);
+      })
+      .catch((error) => {
+        toast.error("Failed to fetch car details");
+        console.error(error);
+      });
+  };
 
   const handleDeleteClick = (carId) => {
     setSelectedCarId(carId);
@@ -59,6 +77,7 @@ const Cars = () => {
 
   return (
     <div className='min-h-screen relative w-full bg-gradient-to-br from-black via-gray-900 to-black text-white px-6 py-10'>
+      <Toaster />
       <h1 className='text-4xl font-bold mb-10 text-center'>Available Cars</h1>
       <button
         onClick={() => navigate("/dashboard")}
@@ -129,7 +148,10 @@ const Cars = () => {
                   </div>
 
                   <div className='w-full flex justify-between'>
-                    <button className=' cursor-pointer px-3 py-2  bg-[#1DCD9F] text-black font-semibold rounded-xl hover:bg-[#17b58b] transition-all duration-300 flex gap-1.5 justify-center items-center'>
+                    <button
+                      onClick={() => handleEditClick(car._id)}
+                      className=' cursor-pointer px-3 py-2  bg-[#1DCD9F] text-black font-semibold rounded-xl hover:bg-[#17b58b] transition-all duration-300 flex gap-1.5 justify-center items-center'
+                    >
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
                         x='0px'
@@ -161,6 +183,126 @@ const Cars = () => {
                   </div>
                 </div>
               ))}
+              {editModalOpen && editCarData && (
+                <div className='fixed inset-0 overflow-auto bg-black bg-opacity-60 backdrop-blur-sm flex justify-center items-center z-50'>
+                  <div className='bg-[#1e1e1e] text-white rounded-2xl p-6 w-full max-w-md shadow-xl animate-scaleIn'>
+                    <h2 className='text-2xl font-bold mb-4'>Edit Car</h2>
+
+                    {/* Image Preview + Upload */}
+                    <div className='mb-4'>
+                      <label className='block text-sm mb-1'>Image</label>
+                      {editCarData.images?.[0] ? (
+                        <img
+                          src={editCarData.images[0]}
+                          alt='Car'
+                          className='w-full h-40 object-cover rounded-lg mb-2'
+                        />
+                      ) : (
+                        <div className='w-full h-40 bg-gray-700 rounded-lg flex items-center justify-center text-gray-400'>
+                          No Image
+                        </div>
+                      )}
+                      <input
+                        type='text'
+                        placeholder='Image URL'
+                        value={editCarData.images[0] || ""}
+                        onChange={(e) =>
+                          setEditCarData({
+                            ...editCarData,
+                            images: [e.target.value],
+                          })
+                        }
+                        className='w-full p-2 bg-[#2a2a2a] border border-gray-600 rounded-md text-white placeholder-gray-400'
+                      />
+                    </div>
+
+                    {/* Input Fields */}
+                    <div className='grid gap-3'>
+                      {[
+                        { label: "Name", key: "name" },
+                        { label: "Model", key: "model" },
+                        { label: "Year", key: "year" },
+                        { label: "Color", key: "color" },
+                        { label: "Engine", key: "engine" },
+                        { label: "Mileage (km)", key: "mileage" },
+                        { label: "Price (Rs.)", key: "price" },
+                        { label: "Stock Quantity", key: "stock_quantity" },
+                      ].map(({ label, key }) => (
+                        <div key={key}>
+                          <label className='block text-sm mb-1'>{label}</label>
+                          <input
+                            type={
+                              key.includes("price") ||
+                              key.includes("mileage") ||
+                              key.includes("year") ||
+                              key.includes("stock")
+                                ? "number"
+                                : "text"
+                            }
+                            value={editCarData[key]}
+                            onChange={(e) =>
+                              setEditCarData({
+                                ...editCarData,
+                                [key]: e.target.value,
+                              })
+                            }
+                            className='w-full p-2 bg-[#2a2a2a] border border-gray-600 rounded-md text-white placeholder-gray-400'
+                            placeholder={label}
+                          />
+                        </div>
+                      ))}
+
+                      {/* Description */}
+                      <div>
+                        <label className='block text-sm mb-1'>
+                          Description
+                        </label>
+                        <textarea
+                          value={editCarData.description}
+                          onChange={(e) =>
+                            setEditCarData({
+                              ...editCarData,
+                              description: e.target.value,
+                            })
+                          }
+                          rows={3}
+                          className='w-full p-2 bg-[#2a2a2a] border border-gray-600 rounded-md text-white placeholder-gray-400'
+                          placeholder='Description'
+                        />
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className='flex justify-end gap-3 mt-6'>
+                      <button
+                        onClick={() => setEditModalOpen(false)}
+                        className='px-4 py-2 rounded-md bg-gray-700 hover:bg-gray-600 text-white transition'
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => {
+                          updateCar(editCarData._id, editCarData)
+                            .then(() => {
+                              toast.success("Car updated successfully");
+                              setEditModalOpen(false);
+                              return getCars();
+                            })
+                            .then((updatedCars) => setCars(updatedCars))
+                            .catch((err) => {
+                              toast.error("Failed to update car");
+                              console.error(err);
+                            });
+                        }}
+                        className='px-4 py-2 rounded-md bg-[#1DCD9F] hover:bg-[#17b58b] text-black font-semibold transition'
+                      >
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {showDialog && (
                 <div className='fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
                   <div className='bg-white/80 rounded-2xl p-6 w-[300px] shadow-xl animate-scaleIn'>
