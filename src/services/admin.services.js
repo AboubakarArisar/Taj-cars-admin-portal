@@ -68,3 +68,13 @@ export const CountCars = async () => {
     throw error;
   }
 };
+
+export const deleteCar = async (carId) => {
+  try {
+    const response = await instance.delete(`/api/car/${carId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cars:", error);
+    throw error;
+  }
+};

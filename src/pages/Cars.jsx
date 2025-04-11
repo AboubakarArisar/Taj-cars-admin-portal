@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getCars } from "../services/admin.services";
+import { getCars, deleteCar } from "../services/admin.services";
 import { useNavigate } from "react-router-dom";
 import "../index.css";
+import toast from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 const Loader = () => {
   return (
     <div className='flex justify-center items-center h-60'>
@@ -22,9 +24,22 @@ const Cars = () => {
   };
 
   const confirmDelete = () => {
-    console.log("Deleting car:", selectedCarId);
-    // TODO: call your delete API here
-    setShowDialog(false);
+    deleteCar(selectedCarId)
+      .then(() => {
+        toast.success("Car deleted successfully");
+        return getCars();
+      })
+      .then((updatedCars) => {
+        setCars(updatedCars);
+      })
+      .catch((error) => {
+        toast.error("Failed deleting the car");
+        console.error(error);
+      })
+      .finally(() => {
+        setShowDialog(false);
+        setSelectedCarId(null);
+      });
   };
 
   const cancelDelete = () => {
