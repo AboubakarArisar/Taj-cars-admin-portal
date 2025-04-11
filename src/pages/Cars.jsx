@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getCars } from "../services/admin.services";
 import { useNavigate } from "react-router-dom";
+import "../index.css";
 const Loader = () => {
   return (
     <div className='flex justify-center items-center h-60'>
@@ -12,6 +13,25 @@ const Cars = () => {
   const [cars, setCars] = useState([]);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [showDialog, setShowDialog] = useState(false);
+  const [selectedCarId, setSelectedCarId] = useState(null);
+
+  const handleDeleteClick = (carId) => {
+    setSelectedCarId(carId);
+    setShowDialog(true);
+  };
+
+  const confirmDelete = () => {
+    console.log("Deleting car:", selectedCarId);
+    // TODO: call your delete API here
+    setShowDialog(false);
+  };
+
+  const cancelDelete = () => {
+    setSelectedCarId(null);
+    setShowDialog(false);
+  };
+
   useEffect(() => {
     getCars()
       .then((data) => {
@@ -107,7 +127,10 @@ const Cars = () => {
                       </svg>
                       Edit
                     </button>
-                    <button className=' cursor-pointer px-3 py-2  bg-[#ca2b2b] text-black font-semibold rounded-xl hover:bg-[#ff0000] transition-all duration-300 flex gap-1.5 justify-center items-center'>
+                    <button
+                      onClick={() => handleDeleteClick(car._id)}
+                      className=' cursor-pointer px-3 py-2  bg-[#ca2b2b] text-black font-semibold rounded-xl hover:bg-[#ff0000] transition-all duration-300 flex gap-1.5 justify-center items-center'
+                    >
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
                         x='0px'
@@ -123,6 +146,32 @@ const Cars = () => {
                   </div>
                 </div>
               ))}
+              {showDialog && (
+                <div className='fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50'>
+                  <div className='bg-white/80 rounded-2xl p-6 w-[300px] shadow-xl animate-scaleIn'>
+                    <h2 className='text-xl font-semibold text-gray-900 mb-4'>
+                      Confirm Deletion
+                    </h2>
+                    <p className='text-gray-700 mb-6'>
+                      Are you sure you want to delete this car?
+                    </p>
+                    <div className='flex justify-end gap-3'>
+                      <button
+                        onClick={cancelDelete}
+                        className=' cursor-pointer px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-800 transition'
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={confirmDelete}
+                        className='px-4 py-2 cursor-pointer rounded-md bg-red-600 hover:bg-red-700 text-white transition'
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </>
