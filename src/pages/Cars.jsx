@@ -105,17 +105,30 @@ const Cars = () => {
                   className='bg-[#1e1e1e] rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm p-5 flex flex-col gap-4'
                 >
                   {car.images.length > 0 ? (
-                    <img
-                      src={car.images[0]}
-                      alt={`${car.name} ${car.model}`}
-                      className='w-full h-48 object-cover rounded-xl'
-                    />
+                    <>
+                      <img
+                        src={car.images[0]}
+                        alt={`${car.name} ${car.model}`}
+                        className='w-full h-48 object-cover rounded-xl relative'
+                      />
+                      <span>
+                        <p className='absolute top-2 left-2 bg-[#1DCD9F] text-black font-semibold rounded-xl px-1 '>
+                          {car.images.length} images
+                        </p>
+                      </span>
+                    </>
                   ) : (
                     <div className='w-full h-48 bg-gray-800 rounded-xl flex items-center justify-center text-gray-400'>
                       No Image
                     </div>
                   )}
                   <div className='grid grid-cols-2 gap-2 text-sm'>
+                    <p>
+                      <span className='text-gray-400'>Make:</span> {car.make}
+                    </p>
+                    <p>
+                      <span className='text-gray-400'>Model:</span> {car.model}
+                    </p>
                     <p>
                       <span className='text-gray-400'>Year:</span> {car.year}
                     </p>

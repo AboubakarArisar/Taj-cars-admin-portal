@@ -114,7 +114,7 @@ const AddCar = () => {
             name='price'
             value={formData.price}
             onChange={handleChange}
-            placeholder='Price (PKR)'
+            placeholder='Price (USD)'
             className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300'
           />
           <select
