@@ -20,24 +20,8 @@ export const getCars = async () => {
 };
 
 export const addCar = async (carData) => {
-  const formData = new FormData();
-
-  formData.append("name", carData.name);
-  formData.append("model", carData.model);
-  formData.append("year", carData.year);
-  formData.append("price", carData.price);
-  formData.append("mileage", carData.mileage);
-  formData.append("engine", carData.engine);
-  formData.append("color", carData.color);
-  formData.append("stock_quantity", carData.stock_quantity);
-  formData.append("description", carData.description);
-
-  carData.images.forEach((image) => {
-    formData.append("images", image);
-  });
-
   try {
-    const response = await instance.post("/api/car/", formData, {
+    const response = await instance.post("/api/car/", carData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

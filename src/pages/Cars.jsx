@@ -115,12 +115,6 @@ const Cars = () => {
                       No Image
                     </div>
                   )}
-                  <div>
-                    <h2 className='text-2xl font-semibold'>
-                      {car.name} {car.model}
-                    </h2>
-                    <p className='text-sm text-gray-400'>{car.description}</p>
-                  </div>
                   <div className='grid grid-cols-2 gap-2 text-sm'>
                     <p>
                       <span className='text-gray-400'>Year:</span> {car.year}
@@ -134,16 +128,22 @@ const Cars = () => {
                       {car.engine}
                     </p>
                     <p>
+                      <span className='text-gray-400'>Fuel:</span> {car.fuel}
+                    </p>
+                    <p>
                       <span className='text-gray-400'>Mileage:</span>{" "}
                       {car.mileage} km
                     </p>
                     <p>
-                      <span className='text-gray-400'>Price:</span> Rs.{" "}
-                      {car.price.toLocaleString()}
+                      <span className='text-gray-400'>Transmission:</span>{" "}
+                      {car.transimission}
                     </p>
                     <p>
-                      <span className='text-gray-400'>In Stock:</span>{" "}
-                      {car.stock_quantity}
+                      <span className='text-gray-400'>Trim:</span> {car.trim}
+                    </p>
+                    <p>
+                      <span className='text-gray-400'>Price:</span> Rs.{" "}
+                      {car.price.toLocaleString()}
                     </p>
                   </div>
 
@@ -223,31 +223,37 @@ const Cars = () => {
 
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
                       {[
-                        { label: "Name", key: "name" },
-                        { label: "Model", key: "model" },
-                        { label: "Year", key: "year" },
-                        { label: "Color", key: "color" },
-                        { label: "Engine", key: "engine" },
-                        { label: "Mileage (km)", key: "mileage" },
-                        { label: "Price (Rs.)", key: "price" },
-                        { label: "Stock Quantity", key: "stock_quantity" },
-                      ].map(({ label, key }) => (
+                        { label: "Make", key: "make", type: "text" },
+                        { label: "Model", key: "model", type: "text" },
+                        { label: "Year", key: "year", type: "number" },
+                        { label: "Color", key: "color", type: "text" },
+                        { label: "Engine", key: "engine", type: "text" },
+                        { label: "Fuel", key: "fuel", type: "text" },
+                        {
+                          label: "Transmission",
+                          key: "transimission",
+                          type: "text",
+                        },
+                        { label: "Trim", key: "trim", type: "text" },
+                        {
+                          label: "Mileage (km)",
+                          key: "mileage",
+                          type: "number",
+                        },
+                        { label: "Price (Rs.)", key: "price", type: "number" },
+                      ].map(({ label, key, type }) => (
                         <div key={key}>
                           <label className='block text-sm mb-1'>{label}</label>
                           <input
-                            type={
-                              key.includes("price") ||
-                              key.includes("mileage") ||
-                              key.includes("year") ||
-                              key.includes("stock")
-                                ? "number"
-                                : "text"
-                            }
-                            value={editCarData[key]}
+                            type={type}
+                            value={editCarData[key] || ""}
                             onChange={(e) =>
                               setEditCarData({
                                 ...editCarData,
-                                [key]: e.target.value,
+                                [key]:
+                                  type === "number"
+                                    ? Number(e.target.value)
+                                    : e.target.value,
                               })
                             }
                             className='w-full p-2 bg-[#2a2a2a] border border-gray-600 rounded-md text-white placeholder-gray-400'

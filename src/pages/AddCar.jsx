@@ -6,14 +6,16 @@ import { useNavigate } from "react-router-dom";
 const AddCar = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    name: "",
+    make: "",
     model: "",
     year: "",
     price: "",
+    fuel: "Petrol",
+    transimission: "Automatic",
     mileage: "",
     engine: "",
     color: "",
-    stock_quantity: "",
+    trim: "",
     description: "",
     images: [],
   });
@@ -32,32 +34,43 @@ const AddCar = () => {
     const selectedFiles = Array.from(e.target.files);
     setFormData((prev) => ({
       ...prev,
-      images: selectedFiles,
+      images: [...prev.images, ...selectedFiles],
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const form = new FormData();
+    for (let key in formData) {
+      if (key === "images") {
+        formData.images.forEach((file) => form.append("images", file));
+      } else {
+        form.append(key, formData[key]);
+      }
+    }
 
     try {
-      await addCar(formData);
+      await addCar(form);
       toast.success("Car added successfully!");
       setFormData({
-        name: "",
+        make: "",
         model: "",
         year: "",
         price: "",
+        fuel: "Petrol",
+        transimission: "Automatic",
         mileage: "",
         engine: "",
         color: "",
-        stock_quantity: "",
+        trim: "",
         description: "",
         images: [],
       });
       navigate("/dashboard");
     } catch (error) {
       toast.error("Failed to add car");
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -74,10 +87,10 @@ const AddCar = () => {
         >
           <input
             type='text'
-            name='name'
-            value={formData.name}
+            name='make'
+            value={formData.make}
             onChange={handleChange}
-            placeholder='Car Name'
+            placeholder='Make'
             className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300'
           />
           <input
@@ -104,6 +117,24 @@ const AddCar = () => {
             placeholder='Price (PKR)'
             className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300'
           />
+          <select
+            name='fuel'
+            value={formData.fuel}
+            onChange={handleChange}
+            className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300'
+          >
+            <option value='Petrol'>Petrol</option>
+            <option value='Diesel'>Diesel</option>
+          </select>
+          <select
+            name='transimission'
+            value={formData.transimission}
+            onChange={handleChange}
+            className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300'
+          >
+            <option value='Automatic'>Automatic</option>
+            <option value='Manual'>Manual</option>
+          </select>
           <input
             type='number'
             name='mileage'
@@ -129,11 +160,11 @@ const AddCar = () => {
             className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300'
           />
           <input
-            type='number'
-            name='stock_quantity'
-            value={formData.stock_quantity}
+            type='text'
+            name='trim'
+            value={formData.trim}
             onChange={handleChange}
-            placeholder='Stock Quantity'
+            placeholder='Trim'
             className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300'
           />
           <textarea
@@ -141,8 +172,8 @@ const AddCar = () => {
             value={formData.description}
             onChange={handleChange}
             placeholder='Description'
-            className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300 md:col-span-2'
             rows={3}
+            className='px-4 py-3 bg-[#2c2c2c] text-white border border-neutral-700 rounded-xl focus:outline-none focus:border-[#1DCD9F] transition-all duration-300 md:col-span-2'
           />
           <div className='md:col-span-2'>
             <label className='block text-sm font-medium mb-1'>
