@@ -55,6 +55,15 @@ const Dashboard = () => {
             Add Car
           </button>
         </div>
+        <div className='bg-gray-900 p-6 rounded-2xl shadow-md flex flex-col justify-between border border-gray-700'>
+          <h2 className='text-xl font-semibold mb-4'>View Contact Messages</h2>
+          <button
+            onClick={() => navigate("/view/contacts")}
+            className='mt-auto bg-[#1DCD9F] cursor-pointer hover:bg-[#17b58b] text-black py-3 px-4 rounded-lg font-semibold transition-all'
+          >
+            View Messages
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -82,3 +82,13 @@ export const getCarById = async (carId) => {
     throw error;
   }
 };
+
+export const getAllContact = async () => {
+  try {
+    const response = await instance.get("/api/contact/");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cars:", error);
+    throw error;
+  }
+};
