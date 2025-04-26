@@ -77,7 +77,13 @@ const AddCar = () => {
   };
 
   return (
-    <div className='w-full min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex justify-center items-center p-4 text-white'>
+    <div className='w-full relative min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex justify-center items-center p-4 text-white'>
+      <button
+        onClick={() => navigate("/dashboard")}
+        className='absolute top-4 left-6 cursor-pointer px-3 py-2 bg-[#1DCD9F] text-black font-semibold rounded-xl hover:bg-[#17b58b] transition-all duration-300'
+      >
+        {"<-"}
+      </button>
       <Toaster />
       <div className='w-full max-w-4xl bg-[#1e1e1e] rounded-2xl shadow-[0_4px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm p-8'>
         <h2 className='text-3xl font-semibold mb-6 text-center'>Add New Car</h2>
