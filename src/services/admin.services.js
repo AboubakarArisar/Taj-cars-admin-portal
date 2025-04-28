@@ -92,3 +92,33 @@ export const getAllContact = async () => {
     throw error;
   }
 };
+
+export const deleteContact = async (contactId) => {
+  try {
+    const response = await instance.delete(`/api/contact/${contactId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cars:", error);
+    throw error;
+  }
+};
+
+export const markAllAsRead = async () => {
+  try {
+    const response = await instance.put(`/api/contact/all/read`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cars:", error);
+    throw error;
+  }
+};
+
+export const getContact = async (contactId) => {
+  try {
+    const response = await instance.get(`/api/contact/${contactId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching cars:", error);
+    throw error;
+  }
+};

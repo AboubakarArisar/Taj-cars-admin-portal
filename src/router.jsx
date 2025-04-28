@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/404";
 import AddCar from "./pages/AddCar";
 import ViewContact from "./pages/ViewContact";
+import SingleMessage from "./pages/SingleMessage";
 
 const AppRouter = () => {
   return (
@@ -19,6 +20,7 @@ const AppRouter = () => {
             <Route path='/add/car' element={<AddCar />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/view/contacts' element={<ViewContact />} />
+            <Route path='/message/:messageId' element={<SingleMessage />} />
           </Routes>
         </div>
       </Router>
