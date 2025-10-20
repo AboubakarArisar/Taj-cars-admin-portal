@@ -9,6 +9,18 @@ export const instance = axios.create({
   },
 });
 
+// Attach token to requests if available
+instance.interceptors.request.use((config) => {
+  try {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  } catch (_) {}
+  return config;
+});
+
 export const getCars = async () => {
   try {
     const response = await instance.get("/api/car/");

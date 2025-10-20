@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CountCars } from "../services/admin.services";
+import { LogoutButton } from "../Components/Logout";
 
 const Loader = () => {
   return (
@@ -24,7 +25,10 @@ const Dashboard = () => {
 
   return (
     <div className='bg-[#111827] min-h-screen p-6 text-white'>
-      <h1 className='text-4xl font-bold mb-8'>Admin Dashboard</h1>
+      <div className='flex items-center justify-between mb-8'>
+        <h1 className='text-4xl font-bold'>Admin Dashboard</h1>
+        <LogoutButton className='bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg font-semibold transition-all' />
+      </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
         <div className='bg-gray-900 p-6 rounded-2xl shadow-md border border-gray-700'>
