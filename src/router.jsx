@@ -8,7 +8,8 @@ import AddCar from "./pages/AddCar";
 import ViewContact from "./pages/ViewContact";
 import SingleMessage from "./pages/SingleMessage";
 import ProtectedRoute from "./Components/ProtectedRoute";
-import Logout from "./Components/Logout";
+import Logout from "./Components/LogoutFixed";
+import ProtectedLayout from "./Components/ProtectedLayout";
 
 const AppRouter = () => {
   return (
@@ -22,11 +23,13 @@ const AppRouter = () => {
 
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
-              <Route path='/dashboard' element={<Dashboard />} />
-              <Route path='/cars' element={<Cars />} />
-              <Route path='/add/car' element={<AddCar />} />
-              <Route path='/view/contacts' element={<ViewContact />} />
-              <Route path='/message/:messageId' element={<SingleMessage />} />
+              <Route element={<ProtectedLayout />}>
+                <Route path='/dashboard' element={<Dashboard />} />
+                <Route path='/cars' element={<Cars />} />
+                <Route path='/add/car' element={<AddCar />} />
+                <Route path='/view/contacts' element={<ViewContact />} />
+                <Route path='/message/:messageId' element={<SingleMessage />} />
+              </Route>
             </Route>
 
             {/* Fallback */}

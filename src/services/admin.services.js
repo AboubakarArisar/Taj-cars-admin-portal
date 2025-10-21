@@ -17,9 +17,38 @@ instance.interceptors.request.use((config) => {
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${token}`;
     }
+    // If no token, block protected API calls (allowlist auth endpoints)
+    const isAuthPath = (config.url || "").includes("/api/admin/signin");
+    if (!token && !isAuthPath) {
+      return Promise.reject({
+        message: "Not authenticated",
+        isAuthError: true,
+        config,
+      });
+    }
   } catch (_) {}
   return config;
 });
+
+// Auto-logout on 401/403
+instance.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    const status = error?.response?.status;
+    if (status === 401 || status === 403 || error?.isAuthError) {
+      try {
+        localStorage.removeItem("token");
+        localStorage.removeItem("admin");
+      } finally {
+        // Force navigation if running in browser context
+        if (typeof window !== "undefined") {
+          window.location.replace("/");
+        }
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const getCars = async () => {
   try {
